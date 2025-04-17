@@ -1,68 +1,61 @@
 package com.example.ql_benhvien;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-import java.util.List;
+    import android.content.Context;
+    import android.view.LayoutInflater;
+    import android.view.View;
+    import android.view.ViewGroup;
+    import android.widget.BaseAdapter;
+    import android.widget.TextView;
+    import androidx.annotation.NonNull;
+    import androidx.recyclerview.widget.RecyclerView;
+    import java.util.List;
 
-public class AppointmentAdapter extends BaseAdapter {
-    private Context context;
-    private List<LichKham> appointments;
-    private LayoutInflater inflater;
+    public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder> {
+        private Context context;
+        private List<LichKham> appointments;
 
-    public AppointmentAdapter(Context context, List<LichKham> appointments) {
-        this.context = context;
-        this.appointments = appointments;
-        this.inflater = LayoutInflater.from(context);
-    }
-
-    @Override
-    public int getCount() {
-        return appointments.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return appointments.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_appointment, parent, false);
-            holder = new ViewHolder();
-            holder.txtPatientName = convertView.findViewById(R.id.txtPatientName);
-//            holder.txtPatientPhone = convertView.findViewById(R.id.txtPatientPhone);
-            holder.txtDateTime = convertView.findViewById(R.id.txtDateTime);
-            holder.txtRoom = convertView.findViewById(R.id.txtRoom);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+        public AppointmentAdapter(Context context, List<LichKham> appointments) {
+            this.context = context;
+            this.appointments = appointments;
         }
 
-        LichKham appointment = appointments.get(position);
-        holder.txtPatientName.setText(appointment.getPatientName());
-        holder.txtPatientPhone.setText(appointment.getPatientPhone());
-        holder.txtDateTime.setText(appointment.getDate() + " " + appointment.getTime());
-        holder.txtRoom.setText(appointment.getRoom());
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_appointment, parent, false);
+            return new ViewHolder(view);
+        }
 
-        return convertView;
-    }
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            LichKham appointment = appointments.get(position);
+            holder.txtDoctorName.setText("Bác sĩ: " + appointment.getDoctorName());
+            holder.txtDepartment.setText("Khoa: " + appointment.getDepartment());
+            holder.txtDate.setText("Ngày: " + appointment.getDate());
+            holder.txtTime.setText("Giờ: " + appointment.getTime());
+            holder.txtStatus.setText("Trạng thái: " + appointment.getStatus());
+        }
 
-    private class ViewHolder {
-        TextView txtPatientName;
-        TextView txtPatientPhone;
-        TextView txtDateTime;
-        TextView txtRoom;
+        @Override
+        public int getItemCount() {
+            return appointments.size();
+        }
+
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            TextView txtDoctorName, txtDepartment, txtDate, txtTime, txtStatus;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                txtDoctorName = itemView.findViewById(R.id.txtDoctorName);
+                txtDepartment = itemView.findViewById(R.id.txtDepartment);
+                txtDate = itemView.findViewById(R.id.txtDate);
+                txtTime = itemView.findViewById(R.id.txtTime);
+                txtStatus = itemView.findViewById(R.id.txtStatus);
+            }
+        }
+
+        public void updateData(List<LichKham> newAppointments) {
+            this.appointments = newAppointments;
+            notifyDataSetChanged();
+        }
     }
-}

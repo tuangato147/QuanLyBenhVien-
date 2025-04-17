@@ -99,10 +99,11 @@ public class LichKham {
 
 
 
-    public void setStatus(byte[] status) {
+    public void setStatus(String status) { // Thay đổi tham số từ byte[] thành String
         this.status = status;
     }
-    public String getStatus() {
+
+    public String getStatus() { // Giữ nguyên phương thức này
         return status;
     }
 

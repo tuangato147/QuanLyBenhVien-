@@ -36,7 +36,8 @@ public class AdminQuanLyThuocActivity extends AppCompatActivity {
     }
 
     private void loadMedicines() {
-        List<Thuoc> medicines = databaseHelper.getAllThuoc();
+        // Thay vì List<String>, sử dụng List<Thuoc>
+        List<Thuoc> medicines = databaseHelper.getAllMedicines();
         adapter = new MedicineAdapter(this, medicines);
         listViewThuoc.setAdapter(adapter);
     }

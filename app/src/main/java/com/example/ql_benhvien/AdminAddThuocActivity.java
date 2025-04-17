@@ -44,7 +44,7 @@ public class AdminAddThuocActivity extends AppCompatActivity {
             return;
         }
 
-        long result = databaseHelper.addThuoc(medicineName);
+        long result = databaseHelper.addMedicine(medicineName);
         if (result != -1) {
             Toast.makeText(this, "Thêm thuốc thành công", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".mainBN">
+    tools:context=".MainBenhNhanActivity">
 
 
     <!-- Search section -->
@@ -156,8 +156,5 @@
 
 
     </GridLayout>
-
-
-
 
 </LinearLayout>

@@ -1,25 +1,20 @@
 package com.example.ql_benhvien;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BacSiDonThuocActivity extends AppCompatActivity {
     private EditText edtPatientPhone, edtPatientName;
     private Button btnAddMedicine, btnSavePrescription;
-    private ListView listViewMedicines;
+    private RecyclerView listViewMedicines;
     private DatabaseHelper databaseHelper;
     private List<Thuoc> selectedMedicines;
     private PrescriptionMedicineAdapter adapter;
@@ -32,7 +27,7 @@ public class BacSiDonThuocActivity extends AppCompatActivity {
         initViews();
         databaseHelper = new DatabaseHelper(this);
         selectedMedicines = new ArrayList<>();
-        setupListView();
+        setupRecyclerView();
         setupButtons();
     }
 
@@ -44,8 +39,9 @@ public class BacSiDonThuocActivity extends AppCompatActivity {
         listViewMedicines = findViewById(R.id.listViewMedicines);
     }
 
-    private void setupListView() {
-        adapter = new PrescriptionMedicineAdapter(this, selectedMedicines);
+    private void setupRecyclerView() {
+        adapter = new PrescriptionMedicineAdapter(selectedMedicines);
+        listViewMedicines.setLayoutManager(new LinearLayoutManager(this));
         listViewMedicines.setAdapter(adapter);
     }
 
@@ -55,7 +51,7 @@ public class BacSiDonThuocActivity extends AppCompatActivity {
     }
 
     private void showMedicineSelectionDialog() {
-        List<Thuoc> allMedicines = databaseHelper.getAllThuoc();
+        List<Thuoc> allMedicines = databaseHelper.getAllMedicines();
         String[] medicineNames = new String[allMedicines.size()];
         for (int i = 0; i < allMedicines.size(); i++) {
             medicineNames[i] = allMedicines.get(i).getName();
@@ -79,7 +75,6 @@ public class BacSiDonThuocActivity extends AppCompatActivity {
             return;
         }
 
-        // Kiểm tra bệnh nhân tồn tại
         BenhNhan patient = databaseHelper.getBenhNhanByPhone(phone);
         if (patient == null || !patient.getName().equals(name)) {
             Toast.makeText(this, "Bệnh nhân không tồn tại", Toast.LENGTH_SHORT).show();
@@ -91,10 +86,8 @@ public class BacSiDonThuocActivity extends AppCompatActivity {
             return;
         }
 
-        // Lưu đơn thuốc
         long prescriptionId = databaseHelper.savePrescription(phone, name);
         if (prescriptionId != -1) {
-            // Lưu chi tiết đơn thuốc
             for (Thuoc medicine : selectedMedicines) {
                 databaseHelper.savePrescriptionDetail(prescriptionId, medicine.getId());
             }
@@ -103,54 +96,5 @@ public class BacSiDonThuocActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Kê đơn thất bại", Toast.LENGTH_SHORT).show();
         }
-    }
-}
-
-class PrescriptionMedicineAdapter extends BaseAdapter {
-    private Context context;
-    private List<Thuoc> medicines;
-    private LayoutInflater inflater;
-
-    public PrescriptionMedicineAdapter(Context context, List<Thuoc> medicines) {
-        this.context = context;
-        this.medicines = medicines;
-        this.inflater = LayoutInflater.from(context);
-    }
-
-    @Override
-    public int getCount() {
-        return medicines.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return medicines.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_prescription_medicine, parent, false);
-            holder = new ViewHolder();
-            holder.txtMedicineName = convertView.findViewById(R.id.txtMedicineName);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        Thuoc medicine = medicines.get(position);
-        holder.txtMedicineName.setText(medicine.getName());
-
-        return convertView;
-    }
-
-    private static class ViewHolder {
-        TextView txtMedicineName;
     }
 }

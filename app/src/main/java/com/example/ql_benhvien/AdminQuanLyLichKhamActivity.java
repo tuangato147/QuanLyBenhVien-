@@ -6,10 +6,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class AdminQuanLyLichKhamActivity extends AppCompatActivity {
-    private ListView listViewAppointments;
+    private RecyclerView recyclerViewAppointments;
     private Button btnAddAppointment;
     private DatabaseHelper databaseHelper;
     private AppointmentAdapter adapter;
@@ -21,37 +25,38 @@ public class AdminQuanLyLichKhamActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
         initViews();
+        setupRecyclerView();
         setupButtonListeners();
         loadAllAppointments();
     }
 
     private void initViews() {
-        listViewAppointments = findViewById(R.id.lvAppointments);
+        recyclerViewAppointments = findViewById(R.id.recyclerViewAppointments);
         btnAddAppointment = findViewById(R.id.btnAddAppointment);
     }
 
+    private void setupRecyclerView() {
+        recyclerViewAppointments.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewAppointments.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    }
+
     private void setupButtonListeners() {
-        btnAddAppointment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Chuyển đến màn hình đặt lịch
-                Intent intent = new Intent(AdminQuanLyLichKhamActivity.this, BenhNhanDatLichActivity.class);
-                startActivityForResult(intent, 1);
-            }
+        btnAddAppointment.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminQuanLyLichKhamActivity.this, BenhNhanDatLichActivity.class);
+            startActivityForResult(intent, 1);
         });
     }
 
     private void loadAllAppointments() {
         List<LichKham> appointments = databaseHelper.getAllLichKham();
         adapter = new AppointmentAdapter(this, appointments);
-        listViewAppointments.setAdapter(adapter);
+        recyclerViewAppointments.setAdapter(adapter);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Refresh danh sách lịch khám sau khi thêm mới
             loadAllAppointments();
         }
     }

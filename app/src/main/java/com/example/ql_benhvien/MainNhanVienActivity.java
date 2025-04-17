@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainNhanVienActivity extends AppCompatActivity {
-    private Button btnScheduleManage, btnMedicineManage;
+    private ImageButton btnScheduleManage, btnMedicineManage;
     private String phoneNumber;
     private DatabaseHelper databaseHelper;
 

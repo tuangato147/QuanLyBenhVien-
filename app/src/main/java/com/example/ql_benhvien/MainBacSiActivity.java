@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainBacSiActivity extends AppCompatActivity {
-    private Button btnTodaySchedule, btnPatientRecords, btnKethuoc, btnAccount;
+    private ImageButton btnTodaySchedule, btnPatientRecords, btnKethuoc, btnAccount;
     private String phoneNumber;
 
     @Override
