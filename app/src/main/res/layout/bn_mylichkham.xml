@@ -10,14 +10,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lịch Sử Khám Bệnh"
+        android:text="Lịch khám của tôi"
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp" />
 
-    <ListView
-        android:id="@+id/listViewHistory"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSchedule"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

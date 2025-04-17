@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Permissions cần thiết -->
 
+    <!-- Permissions cần thiết -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -15,41 +19,39 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="31">
 
-        <activity android:name=".mainBS"
-            android:exported="false"/>
-        <activity android:name=".mainBN"
-            android:exported="false"/>
-        <activity android:name=".mainNV"
-            android:exported="false"/>
-        <activity android:name=".bnHoso"
-            android:exported="false"/>
-        <activity android:name=".info"
-            android:exported="false"/>
-        <activity android:name=".bnDatlich"
-            android:exported="false"/>
-        <activity android:name=".bnLichsukham"
-            android:exported="false"/>
-        <activity android:name=".bsLichkham"
-            android:exported="false"/>
-        <activity android:name=".mainNV"
-            android:exported="false"/>
-        <activity android:name=".adQuanlythuoc"
-            android:exported="false"/>
-
+        <!-- Login Activity - Activity khởi động đầu tiên -->
         <activity
-            android:name=".log_in"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- SignUp Activity -->
-        <activity
-            android:name=".sign_up"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" /> <!-- Main Activities -->
+        </activity>
+
+        <!-- Signup Activity -->
+        <activity android:name=".SignupActivity" />
+
+        <!-- Các Activity của Bác sĩ -->
+        <activity android:name=".MainBacSiActivity" />
+        <activity android:name=".BacSiLichKhamActivity" />
+        <activity android:name=".BacSiHoSoBenhNhanActivity" />
+        <activity android:name=".BacSiDonThuocActivity" />
+        <activity android:name=".BacSiInfoActivity" />
+
+        <!-- Các Activity của Bệnh nhân -->
+        <activity android:name=".MainBenhNhanActivity" />
+        <activity android:name=".BenhNhanDatLichActivity" />
+        <activity android:name=".BenhNhanLichSuKhamActivity" />
+        <activity android:name=".BenhNhanMyLichKhamActivity" />
+        <activity android:name=".BenhNhanDonThuocActivity" />
+        <activity android:name=".BenhNhanInfoActivity" />
+
+        <!-- Các Activity của Nhân viên -->
+        <activity android:name=".MainNhanVienActivity" />
+        <activity android:name=".AdminQuanLyLichKhamActivity" />
+        <activity android:name=".AdminQuanLyThuocActivity" />
+        <activity android:name=".AdminAddThuocActivity" />
 
     </application>
 

@@ -118,7 +118,7 @@
             android:padding="8dp">
 
             <ImageButton
-                android:id="@+id/btnPrescriptions"
+                android:id="@+id/btnKethuoc"
                 android:layout_width="60dp"
                 android:layout_height="65dp"
                 android:scaleType="centerCrop"
@@ -127,7 +127,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đơn thuốc đã kê" />
+                android:text="Kê thuốc" />
         </LinearLayout>
     </GridLayout>
 </LinearLayout>

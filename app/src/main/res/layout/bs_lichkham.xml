@@ -8,13 +8,13 @@
     android:padding="16dp"
     android:background="#FFFFFF"
     android:id="@+id/bs_lichkham"
-    tools:context=".bsLichkham">
+    >
 
     <!-- Tiêu đề -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lịch Khám Đã Xếp"
+        android:text="Lịch Khám Hôm Nay"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -27,7 +27,7 @@
         android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/layoutAppointmentList"
+
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -35,6 +35,10 @@
 
             <!-- Bạn có thể sao chép thêm nhiều CardView như vậy hoặc thêm động bằng code -->
 
+            <ListView
+                android:id="@+id/listViewAppointments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

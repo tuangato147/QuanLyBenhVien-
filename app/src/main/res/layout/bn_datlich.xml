@@ -12,20 +12,52 @@
         android:gravity="center_horizontal"
         android:layout_gravity="center">
 
-        <!-- Chọn chuyên khoa -->
+        <!-- Tiêu đề -->
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Đặt lịch khám"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
 
+        <!-- Nhập tên -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Họ và tên"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập họ và tên" />
+
+        <!-- Nhập số điện thoại -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/edtPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập số điện thoại"
+            android:inputType="phone" />
+
+        <!-- Chọn chuyên khoa -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Chọn chuyên khoa"
             android:textStyle="bold"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="16dp" />
 
         <Spinner
             android:id="@+id/spinnerSpecialty"
@@ -100,7 +132,6 @@
             android:text="Lý do khám / Ghi chú thêm"
             android:textStyle="bold"
             android:layout_marginTop="16dp" />
-
 
         <EditText
             android:id="@+id/edtNote"

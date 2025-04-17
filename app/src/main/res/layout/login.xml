@@ -142,6 +142,8 @@
         </RelativeLayout>
 
         <!-- Nút đăng nhập -->
+
+        <!-- Đăng ký -->
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="200dp"
@@ -151,7 +153,6 @@
             android:textAllCaps="false"
             app:backgroundTint="@null" />
 
-        <!-- Đăng ký -->
         <TextView
             android:id="@+id/txtsign"
             android:layout_width="match_parent"
