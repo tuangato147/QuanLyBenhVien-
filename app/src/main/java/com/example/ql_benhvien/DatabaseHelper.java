@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.text.SimpleDateFormat;
@@ -488,6 +490,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<BacSi> doctors = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
+        // Add logging
+        Log.d("Database", "Querying doctors for department: " + khoa);
+
         String query = "SELECT u." + COLUMN_PHONE + ", u." + COLUMN_NAME + ", u." + COLUMN_EMAIL +
                        ", b." + COLUMN_KHOA + ", b." + COLUMN_AVATAR +
                        " FROM " + TABLE_USERS + " u" +
@@ -495,6 +500,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                        " WHERE b." + COLUMN_KHOA + " = ?";
 
         try (Cursor cursor = db.rawQuery(query, new String[]{khoa})) {
+            // Add logging
+            Log.d("Database", "Found " + cursor.getCount() + " doctors");
+
             if (cursor.moveToFirst()) {
                 do {
                     BacSi doctor = new BacSi(
@@ -505,8 +513,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         getStringOrNull(cursor, COLUMN_AVATAR)
                     );
                     doctors.add(doctor);
+
+                    // Add logging
+                    Log.d("Database", "Added doctor: " + doctor.getName());
                 } while (cursor.moveToNext());
             }
+        } catch (Exception e) {
+            Log.e("Database", "Error getting doctors: " + e.getMessage());
         }
         return doctors;
     }

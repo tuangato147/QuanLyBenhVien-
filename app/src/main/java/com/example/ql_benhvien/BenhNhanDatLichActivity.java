@@ -1,6 +1,7 @@
 package com.example.ql_benhvien;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -79,15 +80,23 @@ public class BenhNhanDatLichActivity extends AppCompatActivity {
 
     private void updateDoctorSpinner(String department) {
         List<BacSi> doctors = databaseHelper.getBacSiByKhoa(department);
+
+        // Add logging
+        Log.d("DatLich", "Department: " + department);
+        Log.d("DatLich", "Number of doctors: " + doctors.size());
+
         ArrayAdapter<BacSi> doctorAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item);
         doctorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         for (BacSi doctor : doctors) {
             doctorAdapter.add(doctor);
+            // Add logging
+            Log.d("DatLich", "Added doctor: " + doctor.getName());
         }
 
         spinnerDoctor.setAdapter(doctorAdapter);
+        doctorAdapter.notifyDataSetChanged();
     }
 
     private void updateRoomSpinner(String department) {

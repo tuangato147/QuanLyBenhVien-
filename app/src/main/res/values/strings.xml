@@ -8,6 +8,7 @@
         <item>Khoa Thần Kinh</item>
 
     </string-array>
+    <!-- Mảng các bác sĩ -->
     <string-array name="roles_array">
         <item>Bệnh nhân</item>
         <item>Bác sĩ</item>

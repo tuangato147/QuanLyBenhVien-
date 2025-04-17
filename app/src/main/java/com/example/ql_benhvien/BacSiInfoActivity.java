@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -35,13 +36,29 @@ public class BacSiInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bs_info);
 
+        databaseHelper = new DatabaseHelper(this); // Thêm dòng này
         phoneNumber = getIntent().getStringExtra("phone");
         initViews();
         setupAutoComplete();
         loadDoctorInfo();
         setupClickListeners();
     }
-
+    //test
+    public BacSi getBacSiInfo(String phone) {
+        try {
+            // Code truy vấn hiện tại
+            BacSi doctor = databaseHelper.getBacSiInfo(phone);
+            if (doctor != null) {
+                return doctor;
+            } else {
+                Log.e("DatabaseError", "No doctor found with phone number: " + phone);
+                return null;
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error getting doctor info: " + e.getMessage());
+            return null;
+        }
+    }
     private void initViews() {
         profileImage = findViewById(R.id.profileImage);
         edtName = findViewById(R.id.edtName);
@@ -94,9 +111,8 @@ public class BacSiInfoActivity extends AppCompatActivity {
                 // Bắt đầu chỉnh sửa
                 isEditing = true;
                 setEditableState(true);
-
                 //luu lai
-                btnEdit.setImageDrawable(getResources().getDrawable(R.drawable.acc));
+               // btnEdit.setImageDrawable(getResources().getDrawable(R.drawable.hoso));
             } else {
                 // Lưu thông tin
                 saveInfo();
@@ -110,32 +126,41 @@ public class BacSiInfoActivity extends AppCompatActivity {
         edtName.setEnabled(editable);
         edtEmail.setEnabled(editable);
         txtIdCard.setEnabled(editable);
-        // Số điện thoại không được phép chỉnh sửa
-        edtPhone.setEnabled(false);
+        edtPhone.setEnabled(editable);
     }
 
     private void saveInfo() {
+        // Get values from input fields
         String name = edtName.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
         String khoa = txtIdCard.getText().toString().trim();
 
+        // Basic validation for required fields
         if (name.isEmpty() || email.isEmpty() || khoa.isEmpty()) {
             Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        BacSi doctor = new BacSi(phoneNumber, name, email, khoa, currentImagePath);
-        boolean success = databaseHelper.updateBacSiInfo(doctor);
+        // Basic email format validation
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Email không đúng định dạng", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        if (success) {
+        // Create doctor object with updated info
+        BacSi doctor = new BacSi(phoneNumber, name, email, khoa, currentImagePath);
+
+        // Save to database without additional checks
+        try {
+            databaseHelper.updateBacSiInfo(doctor);
             Toast.makeText(this, "Cập nhật thông tin thành công", Toast.LENGTH_SHORT).show();
+
+            // Reset edit state
             isEditing = false;
             setEditableState(false);
-
-            //chinh sua
             btnEdit.setImageDrawable(getResources().getDrawable(R.drawable.acc));
-        } else {
-            Toast.makeText(this, "Cập nhật thông tin thất bại", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

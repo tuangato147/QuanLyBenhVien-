@@ -49,10 +49,11 @@
         android:padding="16dp">
 
         <EditText
-            android:id="@+id/edtFullName"
+            android:id="@+id/edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:hint="Họ và tên"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -91,12 +92,11 @@
                     android:textSize="14sp"/>
 
                 <EditText
-                    android:id="@+id/txtPhone"
+                    android:id="@+id/edtPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:textSize="16sp"
-                    android:layout_marginTop="4dp"/>
+                    android:inputType="phone"
+                    android:enabled="false" />
             </LinearLayout>
 
             <!-- Email -->
@@ -117,7 +117,7 @@
                     android:id="@+id/txtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:inputType="textEmailAddress"
                     android:textSize="16sp"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
@@ -173,28 +173,28 @@
 
             </LinearLayout>
 
-            <!-- Địa chỉ -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
+<!--            &lt;!&ndash; Địa chỉ &ndash;&gt;-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:padding="8dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Địa chỉ"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Địa chỉ"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"/>-->
 
-                <EditText
-                    android:id="@+id/txtAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+<!--                <EditText-->
+<!--                    android:id="@+id/txtAddress"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
 
-                    android:textSize="16sp"
-                    android:layout_marginTop="4dp"/>
-            </LinearLayout>
+<!--                    android:textSize="16sp"-->
+<!--                    android:layout_marginTop="4dp"/>-->
+<!--            </LinearLayout>-->
 
             <!-- CMND/CCCD -->
             <LinearLayout

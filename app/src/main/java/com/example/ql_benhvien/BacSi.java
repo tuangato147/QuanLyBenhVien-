@@ -26,4 +26,9 @@ public class BacSi {
     public void setKhoa(String khoa) { this.khoa = khoa; }
     public String getAvatar() { return avatar; }
     public void setAvatar(String avatar) { this.avatar = avatar; }
+
+    @Override
+    public String toString() {
+        return this.getName(); // để Spinner hiển thị tên bác sĩ
+    }
 }

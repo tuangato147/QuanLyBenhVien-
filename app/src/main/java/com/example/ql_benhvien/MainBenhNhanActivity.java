@@ -2,6 +2,7 @@ package com.example.ql_benhvien;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -74,7 +75,7 @@ public class MainBenhNhanActivity extends AppCompatActivity {
             }
         });
 
-        // Quản lý tài khoản
+//         Quản lý tài khoản
         btnAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,5 +84,6 @@ public class MainBenhNhanActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }

@@ -2,15 +2,18 @@ package com.example.ql_benhvien;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainBacSiActivity extends AppCompatActivity {
     private ImageButton btnTodaySchedule, btnPatientRecords, btnKethuoc, btnAccount;
     private String phoneNumber;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,7 @@ public class MainBacSiActivity extends AppCompatActivity {
         // Lấy số điện thoại từ Intent
         phoneNumber = getIntent().getStringExtra("phone");
 
+        databaseHelper = new DatabaseHelper(this);
         initViews();
         setupButtonListeners();
     }
@@ -61,13 +65,11 @@ public class MainBacSiActivity extends AppCompatActivity {
         });
 
         // Quản lý tài khoản
-        btnAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainBacSiActivity.this, BacSiInfoActivity.class);
-                intent.putExtra("phone", phoneNumber);
-                startActivity(intent);
-            }
+        btnAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(MainBacSiActivity.this, BacSiInfoActivity.class);
+            intent.putExtra("phone", phoneNumber);
+            startActivity(intent);
         });
+
     }
 }
