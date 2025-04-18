@@ -18,7 +18,7 @@ package com.example.ql_benhvien;
 
    public class BenhNhanInfoActivity extends AppCompatActivity {
        private ImageView profileImage;
-       private EditText edtName, edtPhone, edtEmail, edtBirthday, edtAddress;
+       private EditText edtName, edtPhone, edtEmail, edtBirthday, edtAddress, txtIdCard,txtBloodType,txtAllergies;
        private CheckBox checkBox, checkBox2;
        private Button btnLogout;
        private ImageButton btnEdit;
@@ -53,6 +53,7 @@ package com.example.ql_benhvien;
            btnEdit = findViewById(R.id.btnEdit);
            btnLogout = findViewById(R.id.btnLogout);
 
+
            setEditableState(false);
        }
 
@@ -64,6 +65,7 @@ package com.example.ql_benhvien;
                edtEmail.setText(patient.getEmail());
                edtBirthday.setText(patient.getBirthday());
                edtAddress.setText(patient.getAddress());
+
 
                if ("Nam".equals(patient.getGender())) {
                    checkBox.setChecked(true);

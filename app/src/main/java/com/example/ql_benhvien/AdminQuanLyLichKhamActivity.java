@@ -43,6 +43,7 @@ public class AdminQuanLyLichKhamActivity extends AppCompatActivity {
     private void setupButtonListeners() {
         btnAddAppointment.setOnClickListener(v -> {
             Intent intent = new Intent(AdminQuanLyLichKhamActivity.this, BenhNhanDatLichActivity.class);
+            intent.putExtra("isAdmin", true); // Add this flag
             startActivityForResult(intent, 1);
         });
     }

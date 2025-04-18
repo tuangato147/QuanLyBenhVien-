@@ -59,7 +59,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_KHOA + " TEXT NOT NULL,"
             + COLUMN_AVATAR + " TEXT,"
             + "FOREIGN KEY(" + COLUMN_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + ") ON DELETE CASCADE"
-            + ")";
+            + ")"
+            ;
 
     private static final String CREATE_TABLE_BENHNHAN = "CREATE TABLE " + TABLE_BENHNHAN + "("
             + COLUMN_PHONE + " TEXT PRIMARY KEY,"
@@ -67,6 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_BIRTHDAY + " TEXT,"
             + COLUMN_GENDER + " TEXT,"
             + COLUMN_ADDRESS + " TEXT,"
+
             + COLUMN_AVATAR + " TEXT,"
             + "FOREIGN KEY(" + COLUMN_PHONE + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_PHONE + ") ON DELETE CASCADE"
             + ")";
@@ -114,6 +116,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        Log.d("DatabaseHelper", "Database path: " + db.getPath());
         try {
             db.execSQL(CREATE_TABLE_USERS);
             db.execSQL(CREATE_TABLE_BACSI);
@@ -186,27 +190,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<LichKham> appointments = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {"id", "patient_name", "patient_phone", "doctor_name", "doctor_phone",
-                           "date", "time", "symptoms", "status"};
+                "date", "time", "department", "room", "status"};
         String orderBy = "date DESC, time DESC";
 
         try (Cursor cursor = db.query(TABLE_LICHKHAM, columns, null, null, null, null, orderBy)) {
             while (cursor.moveToNext()) {
                 LichKham appointment = new LichKham(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getString(4),
-                    cursor.getString(5),
-                    cursor.getString(6),
-                    cursor.getString(7),
-                    cursor.getString(8)
+                        cursor.getInt(getColumnIndexOrThrow(cursor, "id")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "patient_name")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "patient_phone")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "doctor_name")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "doctor_phone")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "date")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "time")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "department")),
+                        cursor.getString(getColumnIndexOrThrow(cursor, "room"))
                 );
+                appointment.setStatus(cursor.getString(getColumnIndexOrThrow(cursor, "status")));
                 appointments.add(appointment);
             }
         }
         return appointments;
     }
+
     public boolean checkLogin(String phone, String password, String role) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_PHONE};
@@ -390,6 +396,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(getColumnIndexOrThrow(cursor, COLUMN_BIRTHDAY)),
                     cursor.getString(getColumnIndexOrThrow(cursor, COLUMN_GENDER)),
                     cursor.getString(getColumnIndexOrThrow(cursor, COLUMN_ADDRESS)),
+
                     getStringOrNull(cursor, COLUMN_AVATAR)
                 );
             }
@@ -423,9 +430,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean updateBacSiInfo(BacSi bacSi) {
         SQLiteDatabase db = this.getWritableDatabase();
+        boolean success = false;
+        
         db.beginTransaction();
         try {
-            // Cập nhật bảng users
+            // Update users table
             ContentValues userValues = new ContentValues();
             userValues.put(COLUMN_NAME, bacSi.getName());
             userValues.put(COLUMN_EMAIL, bacSi.getEmail());
@@ -434,24 +443,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PHONE + " = ?",
                 new String[]{bacSi.getPhone()});
 
-            // Cập nhật bảng bacsi
+            // Update bacsi table
             ContentValues doctorValues = new ContentValues();
+            doctorValues.put(COLUMN_NAME, bacSi.getName());
             doctorValues.put(COLUMN_KHOA, bacSi.getKhoa());
-            doctorValues.put(COLUMN_AVATAR, bacSi.getAvatar());
-
-            int doctorResult = db.update(TABLE_BACSI, doctorValues,
-                COLUMN_PHONE + " = ?",
-                new String[]{bacSi.getPhone()});
-
-            // Kiểm tra kết quả và commit transaction
-            if (userResult > 0 && doctorResult > 0) {
-                db.setTransactionSuccessful();
-                return true;
+            
+            // Only update avatar if it's not null
+            if (bacSi.getAvatar() != null) {
+                doctorValues.put(COLUMN_AVATAR, bacSi.getAvatar());
             }
-            return false;
+
+            // Check if doctor exists first
+            Cursor cursor = db.query(TABLE_BACSI, null,
+                COLUMN_PHONE + " = ?",
+                new String[]{bacSi.getPhone()},
+                null, null, null);
+
+            int doctorResult;
+            if (cursor.moveToFirst()) {
+                // Update existing record
+                doctorResult = db.update(TABLE_BACSI, doctorValues,
+                    COLUMN_PHONE + " = ?",
+                    new String[]{bacSi.getPhone()});
+            } else {
+                // Insert new record
+                doctorValues.put(COLUMN_PHONE, bacSi.getPhone());
+                doctorResult = db.insert(TABLE_BACSI, null, doctorValues) != -1 ? 1 : 0;
+            }
+            cursor.close();
+
+            // Log the results
+            Log.d("DatabaseHelper", "Update results - User table: " + userResult + ", Doctor table: " + doctorResult);
+
+            // Consider success if both operations worked
+            if (userResult > 0 && doctorResult > 0) {
+                success = true;
+                db.setTransactionSuccessful();
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error in updateBacSiInfo: " + e.getMessage());
+            success = false;
         } finally {
             db.endTransaction();
         }
+        
+        return success;
     }
 
     public List<LichKham> getLichKhamByBacSi(String doctorPhone) {
@@ -490,17 +526,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<BacSi> doctors = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Add logging
         Log.d("Database", "Querying doctors for department: " + khoa);
 
         String query = "SELECT u." + COLUMN_PHONE + ", u." + COLUMN_NAME + ", u." + COLUMN_EMAIL +
                        ", b." + COLUMN_KHOA + ", b." + COLUMN_AVATAR +
                        " FROM " + TABLE_USERS + " u" +
                        " INNER JOIN " + TABLE_BACSI + " b ON u." + COLUMN_PHONE + " = b." + COLUMN_PHONE +
-                       " WHERE b." + COLUMN_KHOA + " = ?";
+                       " WHERE b." + COLUMN_KHOA + " COLLATE NOCASE = ? COLLATE NOCASE";
 
         try (Cursor cursor = db.rawQuery(query, new String[]{khoa})) {
-            // Add logging
             Log.d("Database", "Found " + cursor.getCount() + " doctors");
 
             if (cursor.moveToFirst()) {
@@ -513,9 +547,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         getStringOrNull(cursor, COLUMN_AVATAR)
                     );
                     doctors.add(doctor);
-
-                    // Add logging
-                    Log.d("Database", "Added doctor: " + doctor.getName());
+                    Log.d("Database", "Added doctor: " + doctor.getName() + " from department: " + doctor.getKhoa());
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -628,6 +660,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             patientValues.put(COLUMN_BIRTHDAY, patient.getBirthday());
             patientValues.put(COLUMN_GENDER, patient.getGender());
             patientValues.put(COLUMN_ADDRESS, patient.getAddress());
+
             patientValues.put(COLUMN_AVATAR, patient.getAvatar());
 
             int patientResult = db.update(TABLE_BENHNHAN, patientValues,
@@ -776,3 +809,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return medicines;
     }
 }
+

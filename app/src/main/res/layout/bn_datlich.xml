@@ -78,39 +78,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <!-- Chọn ngày -->
-        <TextView
+        <EditText
+            android:id="@+id/edtDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chọn ngày khám"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:hint="Chọn ngày khám"
+            android:focusable="false"
+            android:clickable="true"/>
 
-        <Button
-            android:id="@+id/btnPickDate"
+        <EditText
+            android:id="@+id/edtTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chọn ngày" />
-
-        <TextView
-            android:id="@+id/tvSelectedDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chưa chọn ngày"
-            android:layout_marginTop="8dp" />
-
-        <!-- Chọn giờ -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chọn giờ khám"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-
-        <Spinner
-            android:id="@+id/spinnerTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:hint="Chọn giờ khám"
+            android:focusable="false"
+            android:clickable="true"/>
 
         <!-- Chọn phòng khám -->
         <TextView

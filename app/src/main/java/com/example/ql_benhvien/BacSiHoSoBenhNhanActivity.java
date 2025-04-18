@@ -60,6 +60,13 @@ public class BacSiHoSoBenhNhanActivity extends AppCompatActivity {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_patient_info);
 
+        // Thiết lập kích thước dialog
+        android.view.Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT,
+                            android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+
         // Ánh xạ các view
         ImageView imgAvatar = dialog.findViewById(R.id.imgAvatar);
         TextView txtName = dialog.findViewById(R.id.txtName);
