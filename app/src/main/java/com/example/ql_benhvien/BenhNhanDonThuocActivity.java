@@ -99,5 +99,6 @@ public class BenhNhanDonThuocActivity extends AppCompatActivity {
             txtEmpty.setVisibility(View.GONE);
             listViewPrescriptions.setVisibility(View.VISIBLE);
         }
+
     }
 }
