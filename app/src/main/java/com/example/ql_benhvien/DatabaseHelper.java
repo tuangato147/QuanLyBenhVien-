@@ -808,5 +808,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return medicines;
     }
-}
 
+    public String getDoctorNameById(int doctorId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {"name"};
+        String selection = "id = ?";
+        String[] selectionArgs = {String.valueOf(doctorId)};
+
+        Cursor cursor = db.query("doctors", columns, selection, selectionArgs, null, null, null);
+
+        String doctorName = "";
+        if (cursor.moveToFirst()) {
+            doctorName = cursor.getString(cursor.getColumnIndex("name"));
+        }
+        cursor.close();
+        return doctorName;
+    }
+
+    public int getMedicineCountForPrescription(int prescriptionId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM prescription_medicines WHERE prescription_id = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(prescriptionId)});
+
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+}
